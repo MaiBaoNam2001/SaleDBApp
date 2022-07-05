@@ -3,11 +3,13 @@ package com.mbn.pojo;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
 public class Product extends Base {
     private BigDecimal price;
+    private String manufacturer;
     private String image;
     @Column(name = "created_date")
     private Date createdDate;
@@ -15,18 +17,8 @@ public class Product extends Base {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-
-    public Product() {
-    }
-
-    public Product(int id, String name, String description, BigDecimal price, String image, Date createdDate, boolean active, Category category) {
-        super(id, name, description);
-        this.price = price;
-        this.image = image;
-        this.createdDate = createdDate;
-        this.active = active;
-        this.category = category;
-    }
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private Set<OrderDetail> orderDetails;
 
     public BigDecimal getPrice() {
         return price;
@@ -34,6 +26,14 @@ public class Product extends Base {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
     }
 
     public String getImage() {
@@ -66,5 +66,13 @@ public class Product extends Base {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Set<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(Set<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 }

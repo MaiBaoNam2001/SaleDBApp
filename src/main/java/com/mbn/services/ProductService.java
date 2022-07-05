@@ -1,6 +1,8 @@
 package com.mbn.services;
 
+import com.mbn.pojo.Category;
 import com.mbn.pojo.Product;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -130,5 +132,72 @@ public class ProductService {
 
             return query.getResultList();
         }
+    }
+
+    public static boolean addProduct(Product p, int categoryId) {
+        try (Session session = SESSION_FACTORY.openSession()) {
+            try {
+                session.getTransaction().begin();
+                Category category = session.get(Category.class, categoryId);
+
+                Product product = new Product();
+                product.setName(p.getName());
+                product.setDescription(p.getDescription());
+                product.setPrice(p.getPrice());
+                product.setImage(p.getImage());
+                product.setCreatedDate(p.getCreatedDate());
+                product.setActive(p.isActive());
+                product.setCategory(category);
+
+                session.save(product);
+                session.getTransaction().commit();
+                return true;
+            } catch (HibernateException ex) {
+                session.getTransaction().rollback();
+                ex.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean deleteProduct(int productId) {
+        try (Session session = SESSION_FACTORY.openSession()) {
+            try {
+                session.getTransaction().begin();
+                Product product = session.get(Product.class, productId);
+                session.delete(product);
+                session.getTransaction().commit();
+                return true;
+            } catch (HibernateException ex) {
+                session.getTransaction().rollback();
+                ex.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean updateProduct(int productId, Product p, int categoryId) {
+        try (Session session = SESSION_FACTORY.openSession()) {
+            try {
+                session.getTransaction().begin();
+                Product product = session.get(Product.class, productId);
+                product.setName(p.getName());
+                product.setDescription(p.getDescription());
+                product.setPrice(p.getPrice());
+                product.setImage(p.getImage());
+                product.setCreatedDate(p.getCreatedDate());
+                product.setActive(p.isActive());
+
+                Category category = session.get(Category.class, categoryId);
+                product.setCategory(category);
+                session.save(product);
+                session.getTransaction().commit();
+                return true;
+            } catch (HibernateException ex) {
+                session.getTransaction().rollback();
+                ex.printStackTrace();
+            }
+        }
+        return false;
     }
 }

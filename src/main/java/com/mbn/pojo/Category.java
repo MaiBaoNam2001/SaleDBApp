@@ -1,15 +1,19 @@
 package com.mbn.pojo;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "category")
 public class Category extends Base {
-    public Category() {
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private Set<Product> products;
+
+    public Set<Product> getProducts() {
+        return products;
     }
 
-    public Category(int id, String name, String description) {
-        super(id, name, description);
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 }

@@ -1,7 +1,6 @@
 package com.mbn.services;
 
-import com.mbn.pojo.Category;
-import com.mbn.pojo.Product;
+import com.mbn.pojo.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -26,6 +25,9 @@ public class HibernateUtils {
 
         configuration.addAnnotatedClass(Category.class);
         configuration.addAnnotatedClass(Product.class);
+        configuration.addAnnotatedClass(SaleOrder.class);
+        configuration.addAnnotatedClass(OrderDetail.class);
+        configuration.addAnnotatedClass(User.class);
 
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         SESSION_FACTORY = configuration.buildSessionFactory(serviceRegistry);
