@@ -18,7 +18,7 @@ public class SaleOrder implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "sale_order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "saleOrder", fetch = FetchType.LAZY)
     private Set<OrderDetail> orderDetails;
 
     public int getId() {
